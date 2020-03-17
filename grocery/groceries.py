@@ -4,6 +4,7 @@ def main():
     e = [] # eric list
     x = [] # xtra list
 
+    # initialize values
     m_total = 0.0
     n_total = 0.0
     e_total = 0.0
