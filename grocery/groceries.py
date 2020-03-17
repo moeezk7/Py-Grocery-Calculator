@@ -29,7 +29,7 @@ def main():
     print("-Enter in cost and enter keywords for how to split")
     print("-Input a cost of 0 to quit\n")
     print("-Keyword ex: 'enm' splits between eric, noah, and moeez")
-    print("-Possible keywords: | m:moeez | e:eric | n:noah | x:xtra")
+    print("-Possible keywords: | m:moeez | e:eric | n:noah | x:xtra | a:all except xtra")
 
     while cost != 0:
         to_split_list = [] # holds people to split
@@ -51,6 +51,10 @@ def main():
             to_split_list.append('n')
         if 'x' in to_split_str:
             to_split_list.append('x')
+        if 'a' in to_split_str:
+            to_split_list.append('m')
+            to_split_list.append('e')
+            to_split_list.append('n')
         if not to_split_list: # checks if list is empty
             print("No valid keywords in input\n")
             continue
