@@ -16,11 +16,6 @@ def float_check(input_string):
     return num
 
 def main():
-    # m = [] # moeez list
-    # n = [] # noah list
-    # e = [] # eric list
-    # x = [] # xtra list
-
     # initialize values
     m_total = 0.0
     e_total = 0.0
@@ -87,7 +82,7 @@ def main():
     tax = float_check("Tax: ") # gets tax input and checks if float
     tax = tax / total_people
     print("\n--All values are after tax--\n")
-
+    # adds tax, rounds, and prints
     if m_total:
         m_total += tax
         m_total = round(m_total, 2)
