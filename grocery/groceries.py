@@ -1,11 +1,5 @@
-def split(split_list, cost):
-    split_factor = len(split_list) # amount to split by
-    split_dict = {}
-    for el in split_list: # add each person to dict with price to pay
-        split_dict[el] = cost / split_factor
-    return split_dict
-
-def float_check(input_string):
+# Returns valid float input
+def FloatCheck(input_string):
     while True:
         num = input(input_string)
         try: # check for float
@@ -15,15 +9,38 @@ def float_check(input_string):
             print("Invalid input. Try again.\n")
     return num
 
+# Displays computed totals
+def DisplayBalances(balances, tax):
+    grandTotal = 0
+    print("\n--All values are after tax--\n")
+    for name in balances: # add tax to each person's balance
+        if balances[name] > 0:
+            balances[name]+=tax
+            print(name, "'s total: ", round(balances[name], 2), sep='')
+            grandTotal+=balances[name]
+            
+    print("Grand total:", round(grandTotal, 2))
+
+# Get valid names
+def GetNames():
+    tempNames = set()
+    names = set(input("How to split?: ").lower())
+    # only take valid names
+    if 'm' in names: tempNames.add('m')
+    if 'e' in names: tempNames.add('e')
+    if 'n' in names: tempNames.add('n')
+    if 'x' in names: tempNames.add('x')
+
+    if 'a' in names: 
+        tempNames.add('m')
+        tempNames.add('e')
+        tempNames.add('n')
+                
+    return tempNames
+
 def main():
-    # initialize values
-    m_total = 0.0
-    e_total = 0.0
-    n_total = 0.0
-    x_total = 0.0
-    total_people = 0
-    tax = 0.0
-    cost = 1.0
+    names, allNames = (set() for i in range(2)) # sets of people
+    balances = {'m':0,'e':0,'n':0,'x':0} # keeps track of balances
 
     print("--Welcome to grocery calculator--\n")
     print("-Enter in cost and enter keywords for how to split")
@@ -31,82 +48,24 @@ def main():
     print("-Keyword ex: 'enm' splits between eric, noah, and moeez")
     print("-Possible keywords: | m:moeez | e:eric | n:noah | x:xtra | a:all except xtra")
 
+    cost = 1.0
     while cost != 0:
-        to_split_list = [] # holds people to split
-        cost = float_check("Cost: ") # gets cost input and checks if float
-        if cost == 0: # end loop check
+        cost = FloatCheck("Cost: ") # gets cost input and checks if float
+        if cost == 0: # end loop if cost entered is 0
             continue
-        to_split_str = input("How to split?: ")
-        to_split_str = to_split_str.lower() # convert string to all lower
-        # output inputs
-        print(to_split_str)
-        print(cost)
-
-        # add people who are splitting to list
-        if 'm' in to_split_str:
-            to_split_list.append('m')
-        if 'e' in to_split_str:
-            to_split_list.append('e')
-        if 'n' in to_split_str:
-            to_split_list.append('n')
-        if 'x' in to_split_str:
-            to_split_list.append('x')
-        if 'a' in to_split_str:
-            to_split_list.append('m')
-            to_split_list.append('e')
-            to_split_list.append('n')
-        if not to_split_list: # checks if list is empty
-            print("No valid keywords in input\n")
-            continue
-
-        # returns a dict with keywords and values
-        split_dict = split(to_split_list, cost)
-
-        # adds to totals
-        for key, value in split_dict.items():
-            if key == 'm':
-                m_total += value
-            elif key == 'e':
-                e_total += value
-            elif key == 'n':
-                n_total += value
-            elif key == 'x':
-                x_total += value
-
-    # calculates total people
-    if m_total:
-        total_people += 1
-    if e_total:
-        total_people += 1
-    if n_total:
-        total_people += 1
-    if x_total:
-        total_people += 1
-
-    tax = float_check("Tax: ") # gets tax input and checks if float
-    tax = tax / total_people
-    print("\n--All values are after tax--\n")
-    # adds tax, rounds, and prints
-    if m_total:
-        m_total += tax
-        m_total = round(m_total, 2)
-        print("Moeez's total: ", m_total)
-    if e_total:
-        e_total += tax
-        e_total = round(e_total, 2)
-        print("Eric's total: ", e_total)
-    if n_total:
-        n_total += tax
-        n_total = round(n_total, 2)
-        print("Noah's total: ", n_total)
-    if x_total:
-        x_total += tax
-        x_total = round(x_total, 2)
-        print("Extra total: ", x_total)
-
-    grand_total = m_total + e_total + n_total + x_total
-    grand_total = round(grand_total, 2)
-    print("Grand total: ", grand_total)
         
+        # ask for input and remove duplicates
+        names = GetNames() 
+        allNames = allNames.union(names)
+        if not names: # check if no valid names
+            print("No valid keywords in input\n")
+            continue   
+
+        for name in names:
+            balances[name] += cost/len(names) # compute balances
+
+    tax = FloatCheck("Tax: ") / len(allNames) # computes tax for each
+    DisplayBalances(balances, tax)  
+
 if __name__ == "__main__":
     main()
